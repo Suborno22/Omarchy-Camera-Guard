@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "io.github.suborno251.camera-guard",
+  "name": "Camera Guard",
+  "version": "1.0.0",
+  "author": "Suborno Das",
+  "license": "MIT",
+  "description": "Shows a camera icon in the bar. Detects when any app is using your webcam, tells you which process/browser is using it, and lets you kill the camera off with one click.",
+  "kinds": ["bar-widget"],
+  "entryPoints": { "barWidget": "BarWidget.qml" },
+  "barWidget": {
+    "displayName": "Camera Guard",
+    "category": "Privacy",
+    "allowMultiple": false,
+    "defaultSection": "right"
+  }
+}

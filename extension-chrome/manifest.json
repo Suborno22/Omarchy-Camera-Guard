@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "Camera Guard",
+  "version": "1.0.0",
+  "description": "Per-site webcam blocking, paired with the Camera Guard Omarchy bar plugin.",
+  "key": "REPLACE_WITH_GENERATED_KEY",
+  "permissions": ["nativeMessaging", "tabs"],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["inject.js"],
+      "world": "MAIN",
+      "run_at": "document_start",
+      "all_frames": true
+    },
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ]
+}
