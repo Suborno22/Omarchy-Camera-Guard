@@ -1,9 +1,9 @@
 # Camera Guard (Omarchy Quattro plugin)
 
 A bar icon that watches your webcam, tells you which app is using it, and
-kills it with one click. Icon is dimmed with a diagonal slash when the guard
-has the camera switched off; solid (and red) when something is actively
-using it.
+kills it with one click. Shows "CAM" when idle, "REC" (in red-ish/active
+state per your theme) when something's actively using it, and dims to
+"OFF" when you've switched the guard off.
 
 ## What this plugin can and can't see
 
@@ -16,11 +16,39 @@ using it.
 
 ## Install
 
+**Published:** install straight from GitHub in one step:
+
+```sh
+omarchy plugin add https://github.com/suborno251/camera-guard.git --enable
+```
+
+This clones the repo into `~/.config/omarchy/plugins/`, validates the
+manifest, and enables it. If Omarchy asks which bar section to use, either
+is fine — the manifest already defaults to `right`.
+
+To pull a later update you've pushed to the repo:
+
+```sh
+omarchy plugin update io.github.suborno251.camera-guard
+```
+
+To remove it:
+
+```sh
+omarchy plugin disable io.github.suborno251.camera-guard
+omarchy plugin remove io.github.suborno251.camera-guard
+```
+
+**Local development instead** (editing the code yourself, not installing a
+release): copy the files in by hand rather than using `plugin add`, since
+`plugin add` expects to manage its own git checkout.
+
 ```sh
 mkdir -p ~/.config/omarchy/plugins/io.github.suborno251.camera-guard
 cp -r manifest.json BarWidget.qml Panel.qml scripts \
   ~/.config/omarchy/plugins/io.github.suborno251.camera-guard/
-omarchy-shell shell rescanPlugins
+chmod +x ~/.config/omarchy/plugins/io.github.suborno251.camera-guard/scripts/*.sh
+omarchy-restart-shell
 ```
 
 Then validate:
@@ -119,10 +147,11 @@ in the host manifest's `allowed_origins`/`allowed_extensions`.
 
 ## Notes on the QML
 
-I don't have a running Quickshell/Omarchy environment to test against, so
-`Process`/`StdioCollector` usage here follows Quickshell's documented Io
-API pattern but hasn't been executed. If your installed Quickshell version
-names things slightly differently, check `qs doc Quickshell.Io.Process`
-or the built-in clock plugin's source for the exact signal names and
-adjust `BarWidget.qml`/`Panel.qml` accordingly — the logic/structure
-should carry over directly.
+Confirmed working on real Quickshell/Omarchy — with one gotcha worth
+recording: `WidgetButton` needs `labelVisible: true` and
+`hasVisualContent: true` explicitly set, or it renders nothing at all
+regardless of what `text` contains. Found by diffing against the real
+`omarchy.clock` widget's source (`omarchy plugin clone omarchy.clock
+--edit`) — worth doing that for any future widget that renders blank
+despite `validate`/`qmllint` passing clean, since neither of those checks
+catches a missing runtime-only property like this one.
